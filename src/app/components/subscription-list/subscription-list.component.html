@@ -1,0 +1,92 @@
+<p-table [value]="subscriptions" responsiveLayout="scroll">
+  <ng-template pTemplate="header">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nom de l'abonnement</th>
+      <th scope="col">Date de Début</th>
+      <th scope="col">Date de fin</th>
+      <th scope="col">Utilisateur associé</th>
+      <th scope="col">Modifer</th>
+      <th scope="col">Supprimer</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-subscription>
+    <tr>
+      <td>{{ subscription.id }}</td>
+      <td>{{ subscription.name }}</td>
+      <td>{{ subscription.startingDate }}</td>
+      <td>{{ subscription.endingDate }}</td>
+      <td> <button pButton type="button" label="Modifier" class="p-button-warning"
+          (click)="updateSubscription(subscription)"> </button> </td>
+      <td> <button pButton type="button" label="Supprimer" class="p-button-danger"
+          (click)="deleteSubscription(subscription)"> </button> </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- AJOUT D'ABONNEMENT -->
+<td> <button pButton type="button" label="Ajouter" class="p-button-success" (click)="addSubscription()"> </button>
+  <p-dialog header="Ajout d'abonnement" [(visible)]="addingSubscription">
+    <div class="p-formgroup-inline">
+      <form ngNativeValidate [formGroup]="createSubscriptionForm" (ngSubmit)="onSubmitCreateSubscription()"  >
+        <div class="p-field">
+          <label for="nameToCreate"> Nom </label>
+          <input id="nameToCreate" formControlName="nameToCreate" type="text" pInputText placeholder="Nom" required />
+        </div>
+        <div class="p-field p-col-12 p-md-4">
+          <label for="range">Dates de début et fin </label>
+          <p-calendar appendTo="body" formControlName="dates" selectionMode="range" [readonlyInput]="true"
+            inputId="range" [required]="true"></p-calendar>
+        </div>
+        <div class="p-field">
+          <label for="associatedUser">Utilisateur </label>
+          <p-dropdown [required]="true" appendTo="body" [options]="users" formControlName="selectedUser">
+            <ng-template let-user pTemplate="selectedItem">
+              <div>{{user.lastname}}</div>
+            </ng-template>
+            <ng-template let-user pTemplate="item">
+              <div>{{user.lastname}}</div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <button pButton pRipple type="submit" label="Créer"></button>
+      </form>
+    </div>
+  </p-dialog>
+
+  <!-- MODIFICATION D'ABONNEMENT -->
+  <p-dialog position="right" header="Modifier l'abonnement" [(visible)]="updatingSubscription">
+    <div class="p-formgroup-inline">
+      <form ngNativeValidate [formGroup]="updateSubscriptionForm" (ngSubmit)="onSubmitUpdateSubscription()"  >
+        <div class="p-field">
+          <label for="nameToUpdate">Nom de l'abonnement </label>
+          <input id="nameToUpdate" formControlName="nameToUpdate" type="text" pInputText
+            placeholder="{{selectedSubscription.name}}" required />
+        </div>
+        <div class="p-field">
+          <label for="startingDateToUpdate">Date de début </label>
+          <input id="startingDateToUpdate" formControlName="startingDateToUpdate" type="datetime" pInputText
+            placeholder="{{selectedSubscription.startingDate}}" required />
+        </div>
+        <div class="p-field">
+          <label for="endingDateToUpdate">Date de fin </label>
+          <input id="endingDateToUpdate" formControlName="endingDateToUpdate" type="datetime" pInputText
+            placeholder="{{selectedSubscription.endingDate}}" required />
+        </div>
+        <button pButton pRipple type="submit" label="Modifier"></button>
+      </form>
+    </div>
+  </p-dialog>
+
+  <button pButton type="button" label="Tout supprimer" class="p-button-danger" (click)="confirm()"></button>
+  <p-confirmDialog #cd [style]="{width: '50vw'}">
+    <ng-template pTemplate="header">
+      <h3>Confirmation</h3>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button type="button" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
+      <button type="button" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
+    </ng-template>
+  </p-confirmDialog>
+
+  <app-formation></app-formation>

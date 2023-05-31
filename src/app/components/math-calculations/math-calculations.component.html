@@ -1,0 +1,33 @@
+<!-- CALCUL AIRE D'UN CERCLE-->
+<div class="card">
+    <div class="block-div">
+        <form ngNativeValidate [formGroup]="radiusForm" (ngSubmit)="aeraCalcul()">
+            <h2>Calculer l'aire d'un cercle :</h2>
+            <span class="p-float-label">
+                <input id="float-input" formControlName="radius" type="number" pInputText required>
+                <label for="float-input">Aire</label>
+            </span>
+            <button pButton pRipple type="submit" label="Calculer"></button>
+        </form>
+    </div>
+    <div>
+        <h2>{{ result1 }} </h2>
+    </div>
+</div>
+
+<!-- CALCUL PERIMETRE D'UN CERCLE-->
+<div class="card">
+    <div class="p-formgroup-inline">
+        <form ngNativeValidate [formGroup]="radiusForm" (ngSubmit)="perimeterCalcul()">
+            <h2>Calculer le périmètre d'un cercle :</h2>
+            <span class="p-float-label">
+                <input id="float-input" formControlName="radius" type="number" pInputText required>
+                <label for="float-input">Perimètre</label>
+            </span>
+            <button pButton pRipple type="submit" label="Calculer"></button>
+        </form>
+    </div>
+    <div>
+        <h2>{{ result2 }} </h2>
+    </div>
+</div>

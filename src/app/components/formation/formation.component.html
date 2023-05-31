@@ -1,0 +1,72 @@
+<p-table [value]="formations" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Titre de la formation</th>
+        <th scope="col">Utilisateur(s) associé(s)</th>
+        <th scope="col">Modifer</th>
+        <th scope="col">Supprimer</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-formation>
+      <tr>
+        <td>{{ formation.id }}</td>
+        <td>{{ formation.title }}</td>
+        <td *ngIf="formation.users"><li *ngFor="let user of formation.users">{{ user.lastname }}</li></td> 
+        <td> <button pButton type="button" label="Modifier" class="p-button-warning"
+            (click)="updateFormation(formation)"> </button> </td>
+        <td> <button pButton type="button" label="Supprimer" class="p-button-danger"
+            (click)="deleteFormation(formation)"> </button> </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  
+  <!-- AJOUT DE FORMATION -->
+  <td> <button pButton type="button" label="Ajouter" class="p-button-success" (click)="addFormation()"> </button>
+    <p-dialog header="Ajout d'une formation" [(visible)]="addingFormation">
+      <div class="p-formgroup-inline">
+        <form ngNativeValidate [formGroup]="createFormationForm" (ngSubmit)="onSubmitCreateFormation()"  >
+          <div class="p-field">
+            <label for="titleToCreate"> Nom </label>
+            <input id="titleToCreate" formControlName="titleToCreate" type="text" pInputText placeholder="Titre" required />
+          </div>
+          <div class="p-field">
+            <label for="associatedUser">Utilisateur(s) </label>
+            <p-multiSelect [required]="true" appendTo="body" [options]="users" formControlName="selectedUser">
+              <ng-template let-user pTemplate="selectedItem">
+                <div>{{user.lastname}}</div>
+              </ng-template>
+              <ng-template let-user pTemplate="item">
+                <div>{{user.lastname}}</div>
+              </ng-template>
+            </p-multiSelect>
+          </div>
+          <button pButton pRipple type="submit" label="Créer"></button>
+        </form>
+      </div>
+    </p-dialog>
+  
+    <!-- MODIFICATION DE FORMATION -->
+    <p-dialog position="right" header="Modifier la formation" [(visible)]="updatingFormation">
+      <div class="p-formgroup-inline">
+        <form ngNativeValidate [formGroup]="updateFormationForm" (ngSubmit)="onSubmitUpdateFormation()"  >
+          <div class="p-field">
+            <label for="titleToUpdate">Titre de la formation </label>
+            <input id="titleToUpdate" formControlName="titleToUpdate" type="text" pInputText
+              placeholder="{{selectedFormation.title}}" required />
+          </div>
+          <button pButton pRipple type="submit" label="Modifier"></button>
+        </form>
+      </div>
+    </p-dialog>
+  
+    <button pButton type="button" label="Tout supprimer" class="p-button-danger" (click)="confirm()"></button>
+    <p-confirmDialog #cd [style]="{width: '50vw'}">
+      <ng-template pTemplate="header">
+        <h3>Confirmation</h3>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button type="button" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
+      </ng-template>
+    </p-confirmDialog>

@@ -1,0 +1,77 @@
+<p-table [value]="users" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Prénom</th>
+      <th scope="col">Nom</th>
+      <th scope="col">Email</th>
+      <th scope="col">Modifer</th>
+      <th scope="col">Supprimer</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-user>
+    <tr>
+      <td>{{ user.id }}</td>
+      <td>{{ user.firstname }}</td>
+      <td>{{ user.lastname }}</td>
+      <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+      <td> <button pButton type="button" label="Modifier" class="p-button-warning" (click)="updateUser(user)"> </button> </td>
+      <td> <button pButton type="button" label="Supprimer" class="p-button-danger" (click)="deleteUser(user)"> </button> </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- AJOUT D'UTILISATEUR -->
+<td> <button pButton type="button" label="Ajouter" class="p-button-success" (click)="addUser()"> </button>
+  <p-dialog header="Ajout d'utilisateur" [(visible)]="addingUser">
+    <div class="p-formgroup-inline" >
+      <form ngNativeValidate [formGroup]="createUserForm" (ngSubmit)="onSubmitCreate()"  >
+          <div class="p-field">
+              <label for="firstnameToCreate"> Prénom </label>
+              <input id="firstnameToCreate" formControlName="firstnameToCreate" type="text" pInputText placeholder="Nom" required />
+          </div>
+          <div class="p-field">
+            <label for="lastnameToCreate"> Nom </label>
+            <input id="lastnameToCreate" formControlName="lastnameToCreate" type="text" pInputText placeholder="Prénom" required />
+        </div>
+          <div class="p-field">
+              <label for="emailToCreate">Email </label>
+              <input id="emailToCreate" formControlName="emailToCreate" type="email" pInputText placeholder="Email" required />
+          </div>
+          <button pButton pRipple type="submit" label="Créer"></button>
+      </form>
+  </div>
+</p-dialog>
+
+<!-- MODIFICATION D'UTILISATEUR -->
+<p-dialog header="Modifier l'utilisateur" [(visible)]="updatingUser">
+  <div class="p-formgroup-inline" >
+    <form ngNativeValidate [formGroup]="updateUserForm" (ngSubmit)="onSubmitUpdate()"  >
+        <div class="p-field">
+            <label for="firstnameToUpdate">Prénom </label>
+            <input id="firstnameToUpdate" formControlName="firstnameToUpdate" type="text" pInputText placeholder="{{selectedUser.firstname}}" required />
+        </div>
+        <div class="p-field">
+          <label for="lastnameToUpdate">Prénom </label>
+          <input id="lastnameToUpdate" formControlName="lastnameToUpdate" type="text" pInputText placeholder="{{selectedUser.lastname}}" required />
+      </div>
+        <div class="p-field">
+            <label for="lastnameToUpdate">Email </label>
+            <input id="lastnameToUpdate" formControlName="emailToUpdate" type="email" pInputText placeholder="{{selectedUser.email}}" required />
+        </div>
+        <button pButton pRipple type="submit" label="Modifier"></button>
+    </form>
+</div>
+</p-dialog>
+
+<!--TOUT SUPPRIMER-->
+<button pButton type="button" label="Tout supprimer" class="p-button-danger" (click)="confirm()"></button>
+<p-confirmDialog #cd [style]="{width: '50vw'}">
+    <ng-template pTemplate="header">
+        <h3>Confirmation</h3>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button type="button" pButton icon="pi pi-times" label="Non" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="pi pi-check" label="Oui" (click)="cd.accept()"></button>
+    </ng-template>
+</p-confirmDialog>
